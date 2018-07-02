@@ -1,0 +1,151 @@
+#!/usr/bin/env node
+
+const pkg = require('./package.json')
+
+const chalk = require('chalk')
+const fs = require('fs')
+const program = require('commander')
+const { join } = require('path')
+
+const {
+  buildHtml,
+  buildStyles,
+  generatePdf,
+} = require('./tasks')
+
+const {
+  readFile,
+} = require('./utils')
+
+const DEFAULT_FLAVOUR_NAME = 'default'
+const DEFAULT_SOURCE_DIR = join(process.env.HOME, '.document-templates')
+const DEFAULT_TEMPLATE_NAME = 'invoice'
+
+const ENTRY_FILE = 'template'
+const FLAVOURS_DIR = 'flavours'
+const STYLES_DIR = 'styles'
+
+let yamlDataFile
+
+program
+  .version(pkg.version)
+  .description('Simplest document generator, converts html with yaml data to pdf')
+  .usage('[options] <file>')
+  .option(
+    '-s, --source <path>',
+    `path to source folder, defaults to "${DEFAULT_SOURCE_DIR}"`,
+    DEFAULT_SOURCE_DIR
+  )
+  .option(
+    '-o, --output <path>',
+    'output .pdf file path, defaults to "./<YYYYMMDD>-<templateName>.pdf"'
+  )
+  .option(
+    '-n, --name <name>',
+    'add an optional name to the generated pdf file name. Works only when default output name is being used'
+  )
+  .option(
+    '-t, --template <name>',
+    `template name, defaults to "${DEFAULT_TEMPLATE_NAME}"`,
+    DEFAULT_TEMPLATE_NAME
+  )
+  .option(
+    '-f, --flavour <name>',
+    `flavour name, defaults to "${DEFAULT_FLAVOUR_NAME}"`,
+    DEFAULT_FLAVOUR_NAME
+  )
+  .action(file => {
+    yamlDataFile = file
+  })
+
+function generateDocument(yamlData) {
+  const srcDir = program.source
+  const flavourName = program.flavour
+  const templateName = program.template
+
+  // Generate a nice filename
+  const now = new Date()
+  const date = now.toISOString().slice(0, 10).replace(/-/g, '')
+  const fileName = typeof program.name === 'string' ? ('-' + program.name) : ''
+  const outFile = program.output ? program.output : `./${date}-${templateName}${fileName}.pdf`
+
+  console.log(chalk.bold('document-generator'))
+  console.log(`flavour=${chalk.blue(flavourName)}`)
+  console.log(`output=${chalk.blue(outFile)}`)
+  console.log(`source_dir=${chalk.blue(srcDir)}`)
+  console.log(`template=${chalk.blue(templateName)}`)
+
+  if (!yamlData) {
+    console.error(chalk.red('Error: no input is given.'))
+    process.exit(1)
+  }
+
+  if (!fs.existsSync(srcDir)) {
+    console.error(chalk.red('Error: could not find source folder.'))
+    process.exit(1)
+  }
+
+  const templateDir = join(srcDir, templateName)
+  const flavourFile = join(templateDir, FLAVOURS_DIR, flavourName + '.yaml')
+  const pdfOptionsFile = join(templateDir, `${ENTRY_FILE}.yaml`)
+  const srcStylesFile = join(templateDir, STYLES_DIR, `${ENTRY_FILE}.scss`)
+  const templateFile = join(templateDir, `${ENTRY_FILE}.html`)
+
+  if (!fs.existsSync(templateDir)) {
+    console.error(chalk.red('Error: could not find template folder.'))
+    process.exit(1)
+  }
+
+  if (!fs.existsSync(flavourFile)) {
+    console.error(chalk.red('Error: could not find flavour file.'))
+    process.exit(1)
+  }
+
+  Promise.resolve()
+    .then(() => {
+      return buildStyles(srcStylesFile)
+    })
+    .then(styles => {
+      return buildHtml(templateDir, templateFile, flavourFile, yamlData, styles)
+    })
+    .then(html => {
+      return generatePdf(html, pdfOptionsFile, outFile)
+    })
+    .then(() => {
+      console.log('')
+      console.log(chalk.blue('( ͡° ͜ʖ ͡°) done!'))
+    })
+    .catch(err => {
+      console.log('')
+      console.error(chalk.red(err))
+      console.log('')
+      console.error(chalk.red('An error occurred!'))
+      process.exit(1)
+    })
+}
+
+let stdin = ''
+
+if (process.stdin.isTTY) {
+  program.parse(process.argv)
+
+  readFile(yamlDataFile)
+    .then(yamlData => {
+      generateDocument(yamlData)
+    })
+    .catch(() => {
+      console.error(chalk.red('Error: Could not read input file.'))
+    })
+} else {
+  process.stdin.on('readable', () => {
+    const chunk = process.stdin.read()
+    if (chunk !== null) {
+      stdin += chunk
+    }
+  })
+
+  process.stdin.on('end', () => {
+    program.parse(process.argv)
+    generateDocument(stdin)
+  })
+}
