@@ -1,6 +1,6 @@
 {
   "name": "document-generator",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Convert html documents with yaml data to pdf",
   "main": "document-generator",
   "scripts": {
