@@ -133,15 +133,15 @@ This is a small tutorial on how to maintain your own document templates and how 
 
         touch ~/my-invoice.yaml
 
-So far we only declared one variable named `items` in our template. We can use this now to fill in the fields:
+    So far we only declared one variable named `items` in our template. We can use this now to fill in the fields:
 
-  ```
-  items:
-    - description: Doing something
-      price: 10
-    - description: Doing something else
-      price: 100
-  ```
+    ```
+    items:
+        - description: Doing something
+          price: 10
+        - description: Doing something else
+          price: 100
+    ```
 
 8. Finally let's start `document-generator` to make a .pdf! The program uses the invoice template by default, so no need to declare it:
 
