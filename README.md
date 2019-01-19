@@ -17,7 +17,7 @@ Generate your .pdf invoices, letters, documents, etc. with templates based on [Y
 
 It is recommended to install `document-generator` globally via `npm`:
 
-    `npm install -g document-generator`
+    npm install -g document-generator
 
 ## Usage
 
@@ -42,7 +42,7 @@ This is a small tutorial on how to maintain your own document templates and how 
 
 1. By default `document-generator` looks into `~/.document-templates/` for your defined templates (you can change this via the `--source` option). Create a folder named `invoice` here:
 
-    `mkdir -p ~/.document-templates/invoice`
+        mkdir -p ~/.document-templates/invoice
 
 2. Create a `template.yaml` file in this folder to define basic options which will be passed on to [wkhtmltopdf](https://wkhtmltopdf.org/) for .pdf generation:
 
@@ -84,27 +84,27 @@ This is a small tutorial on how to maintain your own document templates and how 
 
 4. As you can see above, we are using variables in our template to render dynamic data. Every document template can consist of one or more so called *flavours*, think of them as a variation of your documents. Flavours come in handy if you want to for example generate your invoices sometimes in English or in Japanese.
 
-Create a folder named `flavours` in your document template first to use them:
+    Create a folder named `flavours` in your document template first to use them:
 
-    `mkdir flavours`
+        mkdir flavours
 
-Create a flavour file in this folder named `default.yaml`, it will be the standard flavour the generator will pick as long as you didn't define another flavour via the `--flavour` option. Since we used already one flavour variable named `title` in the HTML template, we define it here with YAML syntax:
+    Create a flavour file in this folder named `default.yaml`, it will be the standard flavour the generator will pick as long as you didn't define another flavour via the `--flavour` option. Since we used already one flavour variable named `title` in the HTML template, we define it here with YAML syntax:
 
     *.document-templates/invoice/flavours/default.yaml*
 
-    `title: Invoice`
+        title: Invoice
 
-Let's create an alternative flavour just for fun and name it `de.yaml` to have the option to generate a German invoice:
+    Let's create an alternative flavour just for fun and name it `de.yaml` to have the option to generate a German invoice:
 
     *.document-templates/invoice/flavours/de.yaml*
 
-    `title: Rechnung`
+        title: Rechnung
 
 5. We want to style our document now and therefore create a `styles` folder in the template with a `templates.scss` file inside:
 
-    `mkdir styles`
+        mkdir styles
 
-Use CSS or SCSS sytax now to style your layout. You can also separate your styles into separate files etc., we will only have a single, simple file for now:
+    Use CSS or SCSS sytax now to style your layout. You can also separate your styles into separate files etc., we will only have a single, simple file for now:
 
     *.document-templates/invoice/styles/template.scss*
 
@@ -131,9 +131,7 @@ Use CSS or SCSS sytax now to style your layout. You can also separate your style
 
 7. Create the actual `my-invoice.yaml` now to generate.
 
-  ```
-  touch ~/my-invoice.yaml
-  ```
+        touch ~/my-invoice.yaml
 
 So far we only declared one variable named `items` in our template. We can use this now to fill in the fields:
 
@@ -147,18 +145,12 @@ So far we only declared one variable named `items` in our template. We can use t
 
 8. Finally let's start `document-generator` to make a .pdf! The program uses the invoice template by default, so no need to declare it:
 
-  ```
-  document-generator my-invoice.yaml
-  ```
+        document-generator my-invoice.yaml
 
-To generate the German invoice, we would add the `--flavour` option:
+    To generate the German invoice, we would add the `--flavour` option:
 
-  ```
-  document-generator my-invoice.yaml --flavour de
-  ```
+        document-generator my-invoice.yaml --flavour de
 
-Imagine you would also work with a `letter` template, you could generate one via:
+    Imagine you would also work with a `letter` template, you could generate one via:
 
-  ```
-  document-generator a-serious-letter.yaml --flavour official --template letter
-  ```
+        document-generator a-serious-letter.yaml --flavour official --template letter
