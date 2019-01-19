@@ -29,7 +29,7 @@ let yamlDataFile
 
 program
   .version(pkg.version)
-  .description('Simplest document generator, converts html with yaml data to pdf')
+  .description(pkg.description)
   .usage('[options] <file>')
   .option(
     '-s, --source <path>',
