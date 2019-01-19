@@ -127,7 +127,7 @@ This is a small tutorial on how to maintain your own document templates and how 
     invoice
     ├── flavours
     │   ├── default.yaml
-    │   └── en.yaml
+    │   └── de.yaml
     ├── styles
     │   ├── template.scss
     ├── template.html
