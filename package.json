@@ -1,19 +1,25 @@
 {
   "name": "document-generator",
   "version": "0.1.1",
-  "description": "Convert html documents with yaml data to pdf",
+  "description": "Generate your .pdf invoices, letters, documents, etc. with templates based on YAML, HTML & SCSS",
   "main": "document-generator",
   "scripts": {
     "lint": "eslint '**/*.js' document-generator",
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/adzialocha/document-generator.git"
   },
   "bin": {
     "document-generator": "document-generator"
   },
   "keywords": [
     "invoice",
+    "documents",
     "generator",
     "yaml",
+    "scss",
     "pdf",
     "html"
   ],
