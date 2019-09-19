@@ -159,3 +159,7 @@ This is a small tutorial on how to maintain your own document templates and how 
     To use another template, you could adress it via:
 
         document-generator a-serious-letter.yaml --flavour official --template letter
+
+## License
+
+`MIT`
