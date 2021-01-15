@@ -28,35 +28,38 @@ const STYLES_DIR = 'styles'
 let yamlDataFile
 
 program
+  .storeOptionsAsProperties()
   .version(pkg.version)
   .description(pkg.description)
-  .usage('[options] <file>')
+  .arguments('<file>')
   .option(
     '-s, --source <path>',
     `path to source folder, defaults to "${DEFAULT_SOURCE_DIR}"`,
-    DEFAULT_SOURCE_DIR
+    DEFAULT_SOURCE_DIR,
   )
   .option(
     '-o, --output <path>',
-    'output .pdf file path, defaults to "./<YYYYMMDD>-<templateName>.pdf"'
+    'output .pdf file path, defaults to "./<YYYYMMDD>-<templateName>.pdf"',
   )
   .option(
     '-n, --name <name>',
-    'add an optional name to the generated pdf file name. Works only when default output name is being used'
+    'add an optional name to the generated pdf file name. Works only when default output name is being used',
   )
   .option(
     '-t, --template <name>',
     `template name, defaults to "${DEFAULT_TEMPLATE_NAME}"`,
-    DEFAULT_TEMPLATE_NAME
+    DEFAULT_TEMPLATE_NAME,
   )
   .option(
     '-f, --flavour <name>',
     `flavour name, defaults to "${DEFAULT_FLAVOUR_NAME}"`,
-    DEFAULT_FLAVOUR_NAME
+    DEFAULT_FLAVOUR_NAME,
   )
-  .action(file => {
+  .action((file) => {
     yamlDataFile = file
   })
+
+program.parseAsync(process.argv)
 
 function generateDocument(yamlData) {
   const srcDir = program.source
