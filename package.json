@@ -1,6 +1,6 @@
 {
   "name": "document-generator",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Generate your .pdf invoices, letters, documents, etc. with templates based on YAML, HTML & SCSS",
   "main": "document-generator",
   "scripts": {
