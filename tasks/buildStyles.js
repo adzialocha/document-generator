@@ -1,5 +1,5 @@
 const chalk = require('chalk')
-const sass = require('node-sass')
+const sass = require('sass')
 
 function convert(srcFile) {
   return new Promise((resolve, reject) => {
