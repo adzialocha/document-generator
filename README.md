@@ -16,7 +16,7 @@ Generate your .pdf invoices, letters, documents, etc. with templates based on [Y
 
 It is recommended to install `document-generator` globally via `npm`:
 
-    npm install -g document-generator
+    $ npm install -g document-generator
 
 ## Usage
 
@@ -41,15 +41,15 @@ This is a small tutorial on how to maintain your own document templates and how 
 
 1. By default `document-generator` looks into `~/.document-templates/` for your templates (change this via the `--source` option). Create a folder named `invoice` here:
 
-        mkdir -p ~/.document-templates/invoice
+        $ mkdir -p ~/.document-templates/invoice
 
 2. Create a `template.yaml` file in this folder to define basic options which will be passed on to [wkhtmltopdf](https://wkhtmltopdf.org/) for .pdf generation:
 
-        touch template.yaml
+        $ touch template.yaml
 
     *.document-templates/invoice/template.yaml*
 
-    ```
+    ```yaml
     page-size: A4
     margin-top: 10mm
     margin-right: 10mm
@@ -59,11 +59,11 @@ This is a small tutorial on how to maintain your own document templates and how 
 
 3. Now create a `template.html` file to define the layout of the document. You can use [Nunjucks](https://mozilla.github.io/nunjucks/) template language to work with variables, inheritance, loops etc.:
 
-        touch template.html
+        $ touch template.html
 
     *.document-templates/invoice/template.html*
 
-    ```
+    ```html
     <html>
       <head>
         <meta charset="utf-8">
@@ -87,33 +87,37 @@ This is a small tutorial on how to maintain your own document templates and how 
 
     Create a directory named `flavours` in your template folder:
 
-        mkdir flavours
-        touch flavours/default.yaml
+        $ mkdir flavours
+        $ touch flavours/default.yaml
 
     Create a flavour file in this folder named `default.yaml`, it will be the standard flavour the generator picks as long as you didn't define another flavour via the `--flavour` option. Since we used already one flavour variable named `title` in the HTML template, we define it here with YAML syntax:
 
     *.document-templates/invoice/flavours/default.yaml*
-
-        title: Invoice
+    
+    ```yaml
+    title: Invoice
+    ```
 
     Let's create an alternative flavour (just for fun) and name it `de.yaml` to have the option to generate a German invoice:
     
-        touch de.yaml
+        $ touch de.yaml
 
     *.document-templates/invoice/flavours/de.yaml*
 
-        title: Rechnung
+    ```yaml
+    title: Rechnung
+    ```
 
 5. To style the document we create a `styles` folder in the template folder with a `template.scss` file inside:
 
-        mkdir styles
-        touch styles/template.scss
+        $ mkdir styles
+        $ touch styles/template.scss
 
     Use CSS or SCSS sytax now to style your layout. You can also separate your styles into separate files etc., we will only have a single, simple file for now:
 
     *.document-templates/invoice/styles/template.scss*
 
-    ```
+    ```scss
     $blue: #00f;
 
     h1 {
@@ -123,7 +127,7 @@ This is a small tutorial on how to maintain your own document templates and how 
 
 6. We are done with creating our invoice template! The file structure should be the following now:
 
-    ```
+    ```yaml
     invoice
     ├── flavours
     │   ├── default.yaml
@@ -136,11 +140,11 @@ This is a small tutorial on how to maintain your own document templates and how 
 
 7. Create the actual `my-invoice.yaml` to generate a .pdf file.
 
-        touch ~/my-invoice.yaml
+        $ touch ~/my-invoice.yaml
 
     So far we only declared one variable named `items` in our template, lets fill it with content:
 
-    ```
+    ```yaml
     items:
         - description: Doing something
           price: 10
@@ -150,15 +154,15 @@ This is a small tutorial on how to maintain your own document templates and how 
 
 8. Finally run `document-generator` to make a .pdf! The program uses the `invoice` template by default:
 
-        document-generator my-invoice.yaml
+        $ document-generator my-invoice.yaml
 
     To generate the German invoice, we would add the `--flavour` option:
 
-        document-generator my-invoice.yaml --flavour de
+        $ document-generator my-invoice.yaml --flavour de
 
     To use another template, you could adress it via:
 
-        document-generator a-serious-letter.yaml --flavour official --template letter
+        $ document-generator a-serious-letter.yaml --flavour official --template letter
 
 ## License
 
