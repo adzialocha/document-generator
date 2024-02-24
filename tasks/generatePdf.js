@@ -6,7 +6,7 @@ const {
   yamlToJson,
 } = require('../utils')
 
-module.exports = (html, optionsFilePath, output) => {
+module.exports = (html, optionsFilePath, path) => {
   console.log('')
   console.log(chalk.bold('✓ generate pdf file'))
 
@@ -19,7 +19,7 @@ module.exports = (html, optionsFilePath, output) => {
         return yamlToJson(yaml)
       })
       .then(options => {
-        return htmlToPdf(html, { ...options, output })
+        return htmlToPdf(html, { ...options, path })
       })
       .then(() => {
         console.log(chalk.green('... done!'))

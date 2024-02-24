@@ -10,7 +10,7 @@ Generate your .pdf invoices, letters, documents, etc. with templates based on [Y
 * Generates documents layouted and styled via HTML and SCSS (with variables, @import statements, etc.)
 * Offers filters, inheritance, loops etc. in HTML templates via [Nunjucks](https://mozilla.github.io/nunjucks/)
 * Organizes multiple templates and *flavours* for template variants (for example different languages of one document)
-* Generates .pdf files via [wkhtmltopdf](https://wkhtmltopdf.org/)
+* Generates .pdf files via [puppeteer](https://pptr.dev/)
 
 ## Install
 
@@ -43,18 +43,19 @@ This is a small tutorial on how to maintain your own document templates and how 
 
         $ mkdir -p ~/.document-templates/invoice
 
-2. Create a `template.yaml` file in this folder to define basic options which will be passed on to [wkhtmltopdf](https://wkhtmltopdf.org/) for .pdf generation:
+2. Create a `template.yaml` file in this folder to define basic options which will be passed on to [puppeteer](https://pptr.dev/) for .pdf generation:
 
         $ touch template.yaml
 
     *.document-templates/invoice/template.yaml*
 
     ```yaml
-    page-size: A4
-    margin-top: 10mm
-    margin-right: 10mm
-    margin-bottom: 10mm
-    margin-left: 20mm
+    format: A4
+    margin:
+        top: 30
+        right: 60
+        bottom: 30
+        left: 60
     ```
 
 3. Now create a `template.html` file to define the layout of the document. You can use [Nunjucks](https://mozilla.github.io/nunjucks/) template language to work with variables, inheritance, loops etc.:

@@ -1,13 +1,9 @@
-const wkhtmltopdf = require('wkhtmltopdf')
+const puppeteer = require('puppeteer')
 
-module.exports = htmlToPdf = (html, options = {}) => {
-  return new Promise((resolve, reject) => {
-    wkhtmltopdf(html, options, err => {
-      if (err) {
-        reject(err)
-      } else {
-        resolve()
-      }
-    })
-  })
+module.exports = htmlToPdf = async(html, options = {}) => {
+  const browser = await puppeteer.launch()
+  const page = await browser.newPage()
+  await page.setContent(html)
+  await page.pdf(options)
+  await browser.close()
 }
